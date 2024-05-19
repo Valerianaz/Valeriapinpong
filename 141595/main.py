@@ -2,7 +2,7 @@ from pygame import *
 from random import randint
 from time import time as timer
 class GameSprite(sprite.Sprite):
-    def __init__(self, player_image, player_x, player_y,player_speed,wight,height):
+    def __init__(self, player_image, player_x, player_y,player_speed,size_x,size_y):
         super().__init__()
         self.image = transform.scale(image.load(player_image), (size_x, size_y))
         self.speed = player_speed
@@ -44,4 +44,31 @@ game = True
 finish = False
 clock = time.Clock()
 FPS = 60
+#cоздание спрайтов
+racket1 = Player('racketka1.png',30,200,4,50,150)
+racket2 = Player('racketka1.png',520,200,4,50,150)
+ball = GameSprite('ball1.png',200,200,4,50,50)
+xx = 2
+yy = 2
 while game:
+    for e in event.get():
+        if e.type == QUIT:
+            game = False
+    if not  finish :
+        ball.rect.x += xx 
+        ball.rect.y += yy
+        racket1.update_r()
+        racket2.update_l()
+        if sprite.collide_rect(racket1,ball) or sprite.collide_rect(racket2,ball):
+            xx *= -1
+            yy *= 1
+        if ball.rect.y > win_height -50 or ball.rect.y <0 :
+            yy += -1
+        if ball.rect.x < 0:
+            finish = True
+            game_over = True
+    ball.reset()      
+    racket1.reset()
+    racket2.reset()
+    display.update()
+    time.delay(30)
